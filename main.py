@@ -16,15 +16,7 @@ def user_interaction():
     platforms = ['1', '2']
     platform = 0
     all_vacancies = []
-    # while platform not in platforms:
-    #     platform = input("Выберите платформу (1 или 2):\n   1) HeadHunter\n   2) SuperJob\n")
-    #     if platform not in platforms:
-    #         print("Неправильный ввод. Попробуйте ещё раз.\n")
-    # while platform not in platforms:
-    #     platform = [input("Выберите платформу: HeadHunter или SuperJob.\n") while platform != platforms]
-    #     print("Неправильный ввод. Попробуйте ещё раз.\n") if platform not in platforms else "Корректно"
 
-    # platform = [input("Выберите платформу (1 или 2):\n   1) HeadHunter\n   2) SuperJob\n") for platform in platforms]
     while platform not in platforms:
         platform = input("Выберите платформу (1 или 2):\n   1) HeadHunter\n   2) SuperJob\n")
         print("Вы выбрали HeadHunter") if platform == '1' else 'Вы выбрали SuperJob'
