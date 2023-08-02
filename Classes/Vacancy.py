@@ -9,3 +9,10 @@ class Vacancy:
 
     def __repr__(self):
         return self.name
+
+    def __lt__(self, other):
+        return self.salary_from < other.salary_from
+
+    def __gt__(self, other):
+        return self.salary_from > other.salary_from
+

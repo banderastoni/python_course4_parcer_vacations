@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 import json
+from Classes.Vacancy import Vacancy
 
 
 def save_to_json(vacancy, filename):
@@ -26,6 +27,11 @@ class AbstractVacancy(ABC):
     def add_vacancy(self, vacancy, filename):
         pass
 
+    def read_file(self, filename):
+        with open(filename, 'r', encoding='UTF-8') as f:
+            data = json.load(f)
+        return data
+
     def get_vacancies_by_salary(self, salary, filename):
         pass
 
@@ -37,11 +43,6 @@ class AbstractVacancy(ABC):
 
     def sort_vacancy(self, filename_from, filename_to):
         pass
-
-    def read_file(self, filename):
-        with open(filename, 'r', encoding='UTF-8') as f:
-            data = json.load(f)
-        return data
 
 
 class JSONSaver(AbstractVacancy):
@@ -115,7 +116,28 @@ class JSONSort(AbstractVacancy):
         print(f'\nЗаписано {len(vacancy)} вакансий в файл {filename} соответствующих запросу')
 
     def sort_vacancy(self, filename_from, filename_to):
-        vacancies = []
-        # vacancies = sorted(filename_from, key=lambda d: d['salary'])
-        vacancies = filename_from.sort(key=lambda x: x['salary'], reverse=True)
-        self.add_vacancy(vacancies, filename_to)
+        # vacancies = sorted(filename_from, key=lambda d: d['salary_from'])
+        vacancies_not_sorted = []
+        vacancies_not_sorted = self.read_file(filename_from)
+        vacancies_sorted = []
+        vacancies_list = []
+        counter = 0
+
+        for vacancy in vacancies_not_sorted:
+            vacancy_ = Vacancy(vacancy['name'],
+                               vacancy['salary_from'],
+                               vacancy['salary_to'],
+                               vacancy['url'],
+                               vacancy['info'],
+                               vacancy['responsibility'])
+
+            vacancies_list.append(vacancy_)
+            counter += 1
+
+            if vacancy_.__lt__(vacancies_list[counter - 1]):
+                vacancies_sorted.append(vacancies_list[counter - 1])
+                vacancies_sorted.append(vacancies_list[counter])
+            print(vacancies_sorted)
+
+        # vacancies_sorted = sorted(vacancies_list, key=lambda x: x['salary_from'], reverse=True)
+        self.add_vacancy(vacancies_sorted, filename_to)

@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import requests
 from os import environ
 
+
 URL_HH = 'https://api.hh.ru/vacancies'
 URL_SJ = 'https://api.superjob.ru/2.0/vacancies/'
 SUPER_JOB_API_KEY = environ.get('SJ_API_KEY')
