@@ -1,20 +1,9 @@
-from abc import ABC, abstractmethod
-
+import operator
 import json
+from abc import ABC, abstractmethod
+from datetime import datetime
+
 from Classes.Vacancy import Vacancy
-
-
-def save_to_json(vacancy, filename):
-    vacs = []
-    for item in vacancy:
-        vacs.append(item.__dict__)
-    with open(filename, 'w', encoding='UTF-8') as f:
-        f.write(json.dumps(vacs, indent=2, ensure_ascii=False))
-    print(f'\nЗаписано {len(vacs)} вакансий в файл {filename}\n')
-
-
-def write_file(filename):
-    pass
 
 
 class AbstractVacancy(ABC):
@@ -26,11 +15,6 @@ class AbstractVacancy(ABC):
     @abstractmethod
     def add_vacancy(self, vacancy, filename):
         pass
-
-    def read_file(self, filename):
-        with open(filename, 'r', encoding='UTF-8') as f:
-            data = json.load(f)
-        return data
 
     def get_vacancies_by_salary(self, salary, filename):
         pass
@@ -44,6 +28,14 @@ class AbstractVacancy(ABC):
     def sort_vacancy(self, filename_from, filename_to):
         pass
 
+    def read_file(self, filename):
+        with open(filename, 'r', encoding='UTF-8') as f:
+            data = json.load(f)
+        return data
+
+    def save_json(self, list_vacancy, file_name):
+        pass
+
 
 class JSONSaver(AbstractVacancy):
     """
@@ -54,6 +46,24 @@ class JSONSaver(AbstractVacancy):
         with open(filename, 'w', encoding='UTF-8') as f:
             f.write(json.dumps(vacancy, indent=2, ensure_ascii=False))
         print(f'\nЗаписано {len(vacancy)} вакансий в файл {filename}')
+
+    def add_vacancies(self, vacancy, vacancy2, filename):
+        new_list = []
+        for item in vacancy:
+            new_list.append(item.__dict__)
+        for item in vacancy2:
+            new_list.append(item.__dict__)
+        with open(filename, 'w', encoding='UTF-8') as f:
+            f.write(json.dumps(new_list, indent=2, ensure_ascii=False))
+        print(f'\nЗаписано {len(new_list)} вакансий.\n')
+
+    def save_json(self, list_vacancy, file_name):
+        new_list = []
+        for item in list_vacancy:
+            new_list.append(item.__dict__)
+        with open(file_name, 'w', encoding='utf-8') as f:
+            f.write(json.dumps(new_list, indent=4, ensure_ascii=False))
+        print(f'\n {len(new_list)} вакансий по вашему запросу сохранены в JSON-файл {file_name}.')
 
 
 class JSONLoader(AbstractVacancy):
@@ -115,13 +125,36 @@ class JSONSort(AbstractVacancy):
             f.write(json.dumps(vacancy, indent=2, ensure_ascii=False))
         print(f'\nЗаписано {len(vacancy)} вакансий в файл {filename} соответствующих запросу')
 
-    def sort_vacancy(self, filename_from, filename_to):
+    def sort_vacancy_by_date(self, list_vacancies):
+        """
+        Сортируем по дате список вакансий.
+        """
+        for item in list_vacancies:
+            if 'superjob.ru' in item['url']:
+                item['published_at'] = datetime.fromtimestamp(item['published_at'])
+                item['published_at'] = item['published_at'].strftime('%d-%m-%Y %H:%M:%S')
+                item['published_at'] = datetime.strptime(item['published_at'], '%d-%m-%Y %H:%M:%S')
+            else:
+                item['published_at'] = datetime.fromisoformat(item['published_at'])
+                item['published_at'] = item['published_at'].strftime('%d-%m-%Y %H:%M:%S')
+                item['published_at'] = datetime.strptime(item['published_at'], '%d-%m-%Y %H:%M:%S')
+        sorted_list = sorted(list_vacancies, key=operator.itemgetter('published_at'), reverse=True)
+        for item in sorted_list:
+            item['published_at'] = item['published_at'].strftime('%d-%m-%Y %H:%M:%S')
+        return sorted_list
+
+    def sort_vacancy_by_salary(self, filename_from, filename_to):
+        """
+        Сортировка списка вакансий по зарплате (от большего к меньшему).
+        Расширение функционала, на будущее (сейчас не нужно).
+        """
+
         # vacancies = sorted(filename_from, key=lambda d: d['salary_from'])
-        vacancies_not_sorted = []
+        # vacancies_not_sorted = []
         vacancies_not_sorted = self.read_file(filename_from)
-        vacancies_sorted = []
+        # vacancies_sorted = []
         vacancies_list = []
-        counter = 0
+        vacancies_sorted_ = []
 
         for vacancy in vacancies_not_sorted:
             vacancy_ = Vacancy(vacancy['name'],
@@ -132,12 +165,16 @@ class JSONSort(AbstractVacancy):
                                vacancy['responsibility'])
 
             vacancies_list.append(vacancy_)
-            counter += 1
 
-            if vacancy_.__lt__(vacancies_list[counter - 1]):
-                vacancies_sorted.append(vacancies_list[counter - 1])
-                vacancies_sorted.append(vacancies_list[counter])
-            print(vacancies_sorted)
-
-        # vacancies_sorted = sorted(vacancies_list, key=lambda x: x['salary_from'], reverse=True)
-        self.add_vacancy(vacancies_sorted, filename_to)
+        vacancies_list = sorted(vacancies_list)
+        # for vacancy in vacancies_sorted:
+        #     vacancy_ = Vacancy(vacancy['name'],
+        #                        vacancy['salary_from'],
+        #                        vacancy['salary_to'],
+        #                        vacancy['url'],
+        #                        vacancy['info'],
+        #                        vacancy['responsibility'])
+        #     vacancies_sorted_.append(vacancy_)
+        #
+        # print(vacancies_sorted)
+        self.add_vacancy(vacancies_list, filename_to)
