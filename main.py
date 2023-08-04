@@ -48,10 +48,6 @@ def user_interaction():
     # Записываю в файл data suitable_vacancies.json
     json_saver.add_vacancy(dict_vacancy_with_salary_filter, 'json/suitable_vacancies.json')
 
-    # Сортировка вакансий по зарплате от меньшего к большему
-    # json_sort = JSONSort()
-    # json_sort.sort_vacancy_by_salary('json/suitable_vacancies.json', 'json/suitable_vacancies_sorted.')
-
     # Удаляю вакансию по ссылке
     # vac_del_url = input('Введите url нежелаемой вакансии')
     json_deleter = JSONDeleter()
