@@ -152,9 +152,10 @@ class JSONSort(AbstractVacancy):
         # vacancies = sorted(filename_from, key=lambda d: d['salary_from'])
         # vacancies_not_sorted = []
         vacancies_not_sorted = self.read_file(filename_from)
+        print(vacancies_not_sorted)
         # vacancies_sorted = []
         vacancies_list = []
-        vacancies_sorted_ = []
+        # vacancies_sorted_ = []
 
         for vacancy in vacancies_not_sorted:
             vacancy_ = Vacancy(vacancy['name'],
@@ -162,19 +163,20 @@ class JSONSort(AbstractVacancy):
                                vacancy['salary_to'],
                                vacancy['url'],
                                vacancy['info'],
-                               vacancy['responsibility'])
-
+                               vacancy['responsibility'],
+                               vacancy['published_at'])
             vacancies_list.append(vacancy_)
 
-        vacancies_list = sorted(vacancies_list)
-        # for vacancy in vacancies_sorted:
-        #     vacancy_ = Vacancy(vacancy['name'],
-        #                        vacancy['salary_from'],
-        #                        vacancy['salary_to'],
-        #                        vacancy['url'],
-        #                        vacancy['info'],
-        #                        vacancy['responsibility'])
-        #     vacancies_sorted_.append(vacancy_)
+        vacancies_sorted = sorted(vacancies_list)
+        vacancies_sorted_ = []
+        for vacancy in vacancies_sorted:
+            vacancy_ = Vacancy(vacancy['name'],
+                               vacancy['salary_from'],
+                               vacancy['salary_to'],
+                               vacancy['url'],
+                               vacancy['info'],
+                               vacancy['responsibility'])
+            vacancies_sorted_.append(vacancy_)
         #
         # print(vacancies_sorted)
-        self.add_vacancy(vacancies_list, filename_to)
+        self.add_vacancy(vacancies_sorted_, filename_to)

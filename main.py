@@ -12,7 +12,6 @@ def user_interaction():
     sj_api = SuperJobAPI()
     # Создание экземпляра класса для записи вакансий в файл json
     json_saver = JSONSaver()
-
     # Выбор платформы и сохранений вакансий в файл
     while platform not in platforms:
         # responsibility_sj = 'см. в предыдущее поле'
@@ -27,14 +26,14 @@ def user_interaction():
             case '2':
                 print("Вы выбрали SuperJob")
                 # Получение вакансий с SuperJob
-                sj_vacancies = sj_api.get_vacancies("SuperJob")
+                sj_vacancies = sj_api.get_vacancies("Python")
                 # Сохранение вакансий в файл json
                 json_saver.add_vacancy(sj_for_dict(sj_vacancies), 'json/all_vacancies.json')
             case '3':
                 print("Вы выбрали все платформы вакансий")
                 # Получение вакансий с разных платформ
                 hh_vacancies = hh_api.get_vacancies("Python")
-                sj_vacancies = sj_api.get_vacancies("SuperJob")
+                sj_vacancies = sj_api.get_vacancies("Python")
                 # Сохранение вакансий в файл json
                 json_saver.add_vacancies(hh_for_dict(hh_vacancies), sj_for_dict(sj_vacancies),
                                          'json/all_vacancies.json')
@@ -51,6 +50,7 @@ def user_interaction():
 
     # Сортировка вакансий по зарплате от меньшего к большему
     # json_sort = JSONSort()
+    # json_sort.sort_vacancy_by_salary('json/suitable_vacancies.json', 'json/suitable_vacancies_sorted.')
 
     # Удаляю вакансию по ссылке
     # vac_del_url = input('Введите url нежелаемой вакансии')

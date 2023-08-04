@@ -18,9 +18,9 @@ def hh_for_dict(hh_vacancies):
     return hh_vacancies_dict
 
 
-def sj_for_dict(superjob_vacancies):
+def sj_for_dict(sj_vacancies):
     sj_vacancies_dict = []
-    for vacancy in superjob_vacancies:
+    for vacancy in sj_vacancies:
         sj_vacancy = Vacancy(vacancy['profession'],
                              vacancy['payment_from'],
                              vacancy['payment_to'],
