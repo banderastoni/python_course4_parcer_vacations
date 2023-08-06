@@ -1,6 +1,6 @@
 from Classes.apiclasses import HeadHunterAPI, SuperJobAPI
 from Classes.json_funcs_class import JSONSaver, JSONLoader, JSONDeleter, JSONResponse, JSONSort
-from src.utils import hh_for_dict, sj_for_dict, sorted_data, instance_vacancy_sorted, top_n_vacancies
+from src.utils import hh_for_list, sj_for_list, sorted_data, instance_vacancy_sorted, top_n_vacancies
 
 
 def user_interaction():
@@ -22,20 +22,20 @@ def user_interaction():
                 # Получение вакансий с HeadHunter
                 hh_vacancies = hh_api.get_vacancies("Python")
                 # Сохранение вакансий в файл json
-                json_saver.add_vacancy(hh_for_dict(hh_vacancies), 'json/all_vacancies.json')
+                json_saver.add_vacancy(hh_for_list(hh_vacancies), 'json/all_vacancies.json')
             case '2':
                 print("Вы выбрали SuperJob")
                 # Получение вакансий с SuperJob
                 sj_vacancies = sj_api.get_vacancies("Python")
                 # Сохранение вакансий в файл json
-                json_saver.add_vacancy(sj_for_dict(sj_vacancies), 'json/all_vacancies.json')
+                json_saver.add_vacancy(sj_for_list(sj_vacancies), 'json/all_vacancies.json')
             case '3':
                 print("Вы выбрали все платформы вакансий")
                 # Получение вакансий с разных платформ
                 hh_vacancies = hh_api.get_vacancies("Python")
                 sj_vacancies = sj_api.get_vacancies("Python")
                 # Сохранение вакансий в файл json
-                json_saver.add_vacancies(hh_for_dict(hh_vacancies), sj_for_dict(sj_vacancies),
+                json_saver.add_vacancies(hh_for_list(hh_vacancies), sj_for_list(sj_vacancies),
                                          'json/all_vacancies.json')
             case _:
                 print("Неправильный ввод. Попробуйте ещё раз.\n")
@@ -43,10 +43,10 @@ def user_interaction():
     # Фильтр вакансии по зарплате не менее чем
     min_salary = int(input("Введите минимальную зарплату:\n"))
     json_loader = JSONLoader()
-    dict_vacancy_with_salary_filter = json_loader.get_vacancies_by_salary(min_salary, 'json/all_vacancies.json')
+    list_vacancy_with_salary_filter = json_loader.get_vacancies_by_salary(min_salary, 'json/all_vacancies.json')
 
     # Записываю в файл data suitable_vacancies.json
-    json_saver.add_vacancy(dict_vacancy_with_salary_filter, 'json/suitable_vacancies.json')
+    json_saver.add_vacancy(list_vacancy_with_salary_filter, 'json/suitable_vacancies.json')
 
     # Удаляю вакансию по ссылке
     # vac_del_url = input('Введите url нежелаемой вакансии')

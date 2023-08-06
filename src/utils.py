@@ -4,8 +4,8 @@ from datetime import datetime
 from Classes.Vacancy import Vacancy
 
 
-def hh_for_dict(hh_vacancies):
-    hh_vacancies_dict = []
+def hh_for_list(hh_vacancies):
+    hh_vacancies_list = []
     for vacancy in hh_vacancies:
         hh_vacancy = Vacancy(vacancy['name'],
                              vacancy['salary']['from'],
@@ -14,12 +14,12 @@ def hh_for_dict(hh_vacancies):
                              vacancy['snippet']['requirement'],
                              vacancy['snippet']['responsibility'],
                              vacancy["published_at"])
-        hh_vacancies_dict.append(hh_vacancy)
-    return hh_vacancies_dict
+        hh_vacancies_list.append(hh_vacancy)
+    return hh_vacancies_list
 
 
-def sj_for_dict(sj_vacancies):
-    sj_vacancies_dict = []
+def sj_for_list(sj_vacancies):
+    sj_vacancies_list = []
     for vacancy in sj_vacancies:
         sj_vacancy = Vacancy(vacancy['profession'],
                              vacancy['payment_from'],
@@ -28,8 +28,8 @@ def sj_for_dict(sj_vacancies):
                              vacancy['candidat'],
                              None,
                              vacancy["date_published"])
-        sj_vacancies_dict.append(sj_vacancy)
-    return sj_vacancies_dict
+        sj_vacancies_list.append(sj_vacancy)
+    return sj_vacancies_list
 
 
 def sorted_data(list_vacancies):
